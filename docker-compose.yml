@@ -11,13 +11,13 @@ services:
       MYSQL_DATABASE: social
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     volumes:
-      - ".backend/init.sql:/docker-entrypoint-initdb.d/1.sql"
+      - "./backend/init.sql:/docker-entrypoint-initdb.d/1.sql"
     ports:
       - "3306:3306"
 
   back:
     build:
-      context: .
+      context: ./backend
     depends_on:
       - db
     volumes:

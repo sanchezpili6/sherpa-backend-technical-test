@@ -7,6 +7,5 @@ CREDENTIALS = {'host': 'db',
                'password': 'pintastic'}
 
 
-
 def create_connector():
     return connector.connect(**CREDENTIALS)
