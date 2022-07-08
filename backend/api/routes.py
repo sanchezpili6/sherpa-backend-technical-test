@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask import jsonify
 from flask import request
 from backend.logic.auth import login, logout, get_user_status
-from backend.logic.posts import create_post, get_all_posts, get_posts_by_author, get_post, delete_post, update_post
+from backend.logic.posts import get_post_report, create_post, get_all_posts, get_posts_by_author, get_post, delete_post, update_post
 from backend.logic.users import DEFAULT_PROFILE_PIC, create_user, delete_user, update_user, get_user
 
 main_blueprint = Blueprint('main', __name__)
@@ -147,3 +147,74 @@ def get_all_posts_endpoint():
     """
     user_id_getting = request.json['user_id_getting']
     return jsonify(get_all_posts(user_id_getting))
+
+
+@main_blueprint.route('/get_posts_by_author/', methods=['GET'])
+def get_posts_by_author_endpoint():
+    """
+    Get posts by author.
+    receives:
+        author_id: int
+    :return:
+        {'posts': [{'id': int, 'author_id': int, 'title': str, 'post_text': str, 'created_at': str, 'times_seen': int}]}
+    """
+    author_id = request.json['author_id']
+    return jsonify(get_posts_by_author(author_id))
+
+
+@main_blueprint.route('/get_post/', methods=['GET'])
+def get_post_endpoint():
+    """
+    Get a post.
+    receives:
+        viewer_id: int
+        post_id: int
+    :return:
+        {'post': {'id': int, 'author_id': int, 'title': str, 'post_text': str, 'created_at': str, 'times_seen': int}}
+    """
+    post_id = request.json['post_id']
+    viewer_id = request.json['viewer_id']
+    return jsonify(get_post(post_id, viewer_id))
+
+
+@main_blueprint.route('/update_post/', methods=['POST'])
+def update_post_endpoint():
+    """
+    Update a post.
+    receives:
+        post_id: int
+        title: str
+        post_text: str
+        post_author_id: int
+    """
+    post_id = request.json['post_id']
+    title = request.json['title']
+    post_text = request.json['post_text']
+    post_author_id = request.json['post_author_id']
+    return jsonify(update_post(post_id, title, post_text, post_author_id))
+
+
+@main_blueprint.route('/delete_post/', methods=['POST'])
+def delete_post_endpoint():
+    """
+    Delete a post.
+    receives:
+        post_id: int
+        post_author_id: int
+    """
+    post_id = request.json['post_id']
+    post_author_id = request.json['post_author_id']
+    return jsonify(delete_post(post_id, post_author_id))
+
+
+@main_blueprint.route('/get_post_report/', methods=['GET'])
+def get_post_report_endpoint():
+    """
+    Get a post report.
+    receives:
+        post_id: int
+    :return:
+        {'views_count': int, viewers: [{'viewer_id': int, 'view_datetime': str}]}
+    """
+    post_id = request.json['post_id']
+    return jsonify(get_post_report(post_id))
