@@ -1,3 +1,4 @@
 ipdb==0.13.9
 ipython==8.4.0
 mysql-connector-python==8.0.29
+pdoc3
